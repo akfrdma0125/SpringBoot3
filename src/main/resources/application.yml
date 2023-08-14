@@ -1,0 +1,8 @@
+spring:
+  jpa:
+    show-sql: true # 전송 쿼리 확인
+    properties:
+      hibernate:
+        format_sql: true # 전송 쿼리를 format 하여 가독성을 높임
+
+    defer-datasource-initialization: true

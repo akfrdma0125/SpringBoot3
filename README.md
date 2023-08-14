@@ -13,6 +13,8 @@ sql 문에 대한 로그가 별도로 남지는 않음
 ## 테스트
 ### JUnit
 #### 자바 언어를 위한 단위 테스트 프레임워크(메서드 단위)
+@SpringBootTest: @SpringBootApplication이 있는 클래스를 찾고, 그 클래스에 포함되어 있는 빈을 찾은 다음 테스트용 애플리케이션 컨텍스트 생성  
+@AutoConfigureMockMvc: MockMvc 생성하고 구성하는 애너테이션, 요청 및 전송, 응답 기능을 제공하는 유틸리티 클래스  
 
 #### AssertJ
 #### JUnit 함께 사용해 가독성을 확 높여주는 라이브러리

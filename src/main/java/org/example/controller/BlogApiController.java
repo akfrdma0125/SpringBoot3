@@ -4,13 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.example.domain.Article;
 import org.example.dto.AddArticleRequest;
 import org.example.dto.ArticleResponse;
+import org.example.dto.UpdateArticleRequest;
 import org.example.service.BlogService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,4 +30,20 @@ public class BlogApiController {
         return ResponseEntity.ok()
                 .body(blogService.findAll());
     }
+
+    @GetMapping("/api/articles/{id}")
+    public ResponseEntity<ArticleResponse> findAllArticles(@PathVariable long id){
+        return ResponseEntity.ok()
+                .body(blogService.findById(id));
+    }
+
+    @PutMapping("/api/articles/{id}")
+    public ResponseEntity<Article> updateArticle(@PathVariable long id,
+                                                 @RequestBody UpdateArticleRequest request){
+        Article savedArticle = blogService.update(id,request);
+
+        return ResponseEntity.ok()
+                .body(savedArticle);
+    }
+
 }

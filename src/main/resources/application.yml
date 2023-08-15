@@ -4,13 +4,9 @@ spring:
     properties:
       hibernate:
         format_sql: true # 전송 쿼리를 format 하여 가독성을 높임
-
     defer-datasource-initialization: true
-
-logging:
-  level:
-    org:
-      hibernate:
-        type:
-          descriptor:
-            sql: trace
+  datasource:
+    url: jdbc:h2:mem:testdb
+  h2:
+    console:
+      enabled: true

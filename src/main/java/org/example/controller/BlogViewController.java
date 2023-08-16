@@ -2,12 +2,8 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.domain.Article;
-import org.example.dto.AddArticleRequest;
-import org.example.dto.ArticleResponse;
-import org.example.dto.UpdateArticleRequest;
+import org.example.dto.*;
 import org.example.service.BlogService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,34 +15,35 @@ import java.util.List;
 public class BlogViewController {
     private final BlogService blogService;
 
-    @PostMapping("/articles")
-    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request){
-        Article savedArticle = blogService.save(request);
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(savedArticle);
-    }
-
     @GetMapping("/articles")
-    public String getArticles(Model model){
+    public String getArticles(Model model) {
+        List<ArticleListViewResponse> articles = blogService.findAll()
+                .stream()
+                .map(ArticleListViewResponse::new)
+                .toList();
+        model.addAttribute("articles", articles);
 
-        return ResponseEntity.ok()
-                .body(blogService.findAll());
+        return "articleList";
     }
 
-    @GetMapping("/api/articles/{id}")
-    public ResponseEntity<ArticleResponse> findAllArticles(@PathVariable long id){
-        return ResponseEntity.ok()
-                .body(blogService.findById(id));
+    @GetMapping("/articles/{id}")
+    public String getArticle(@PathVariable Long id, Model model) {
+        Article article = blogService.findById(id);
+        model.addAttribute("article", new ArticleViewResponse(article));
+
+        return "article";
     }
 
-    @PutMapping("/api/articles/{id}")
-    public ResponseEntity<Article> updateArticle(@PathVariable long id,
-                                                 @RequestBody UpdateArticleRequest request){
-        Article savedArticle = blogService.update(id,request);
 
-        return ResponseEntity.ok()
-                .body(savedArticle);
+    @GetMapping("/new-article")
+    public String newArticle(@RequestParam(required = false) Long id, Model model) {
+        if (id == null) {
+            model.addAttribute("article", new ArticleViewResponse());
+        } else {
+            Article article = blogService.findById(id);
+            model.addAttribute("article", new ArticleViewResponse(article));
+        }
+
+        return "newArticle";
     }
-
 }

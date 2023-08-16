@@ -3,7 +3,6 @@ package org.example.service;
 import lombok.RequiredArgsConstructor;
 import org.example.domain.Article;
 import org.example.dto.AddArticleRequest;
-import org.example.dto.ArticleResponse;
 import org.example.dto.UpdateArticleRequest;
 import org.example.repository.BlogRepository;
 import org.springframework.stereotype.Service;
@@ -20,19 +19,14 @@ public class BlogService {
         return blogRepository.save(request.toEntity());
     }
 
-    public List<ArticleResponse> findAll(){
-        return blogRepository.findAll()
-                .stream()
-                .map(ArticleResponse::new)
-                .toList();
+    public List<Article> findAll(){
+        return blogRepository.findAll();
     }
 
-    public ArticleResponse findById(long id){
+    public Article findById(long id){
 
-        Article article = blogRepository.findById(id)
+        return blogRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("Not Found: "+id));
-
-        return new ArticleResponse(article);
     }
 
     @Transactional
@@ -43,5 +37,9 @@ public class BlogService {
         article.update(request.getTitle(), request.getContent());
 
         return article;
+    }
+
+    public void delete(long id) {
+        blogRepository.deleteById(id);
     }
 }

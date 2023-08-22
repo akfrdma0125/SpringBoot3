@@ -1,6 +1,8 @@
 package org.example.config;
 
+import com.fasterxml.jackson.core.filter.TokenFilter;
 import lombok.RequiredArgsConstructor;
+import org.example.config.jwt.TokenProvider;
 import org.example.service.UserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,13 +12,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @RequiredArgsConstructor
 @Configuration
 public class WebSecurityConfig {
-
+    private final TokenProvider jwtProvider;
     private final UserDetailService userService;
 
     @Bean
@@ -43,6 +46,7 @@ public class WebSecurityConfig {
                 .invalidateHttpSession(true)
                 .and()
                 .csrf().disable()
+                .addFilterBefore(new TokenAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

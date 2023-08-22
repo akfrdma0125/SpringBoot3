@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.dto.CreateAccessTokenRequest;
 import org.example.dto.CreateAccessTokenResponse;
 import org.example.service.TokenService;
